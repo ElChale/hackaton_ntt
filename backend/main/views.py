@@ -34,14 +34,17 @@ class CreatePedido(APIView):
 class GetRoute(APIView):
       def get(self, request):
             pedidos = Pedido.objects.all()
-            coordenadas = [(-12.048395600763323, -77.1139782323095)]
+            coordenadas = []
             # Iterate through each instance and extract longitude and latitude
             for instance in pedidos:
                   coordenadas.append((instance.latitude, instance.longitude))
-            coordenadas.append((-12.048395600763323, -77.1139782323095))
-            ruta_optimizada = list(range(1, len(coordenadas)))
-            url = generar_url_google_maps(coordenadas, ruta_optimizada)
-            return Response({'URL': f'{url}'})
+            
+            url = generar_url_google_maps(coordenadas)
+            return Response({
+                  'URL': f'{url}',
+                  'N_PEDIDOS': len(coordenadas),
+                  'N_CLUSTERS': 4
+            })
 
             
           

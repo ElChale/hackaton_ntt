@@ -1,7 +1,7 @@
 import random
 
 def distancia_euclidiana(punto1, punto2):
-    return ((punto1[0] - punto2[0]) ** 2 + (punto1[1] - punto2[1]) ** 2) ** 0.5
+    return ((float(punto1[0]) - float(punto2[0])) ** 2 + (float(punto1[1]) - float(punto2[1])) ** 2) ** 0.5
 
 def punto_concentrico(coordenadas, k, iteraciones=100):
     # Inicialización de los centroides de forma aleatoria
@@ -18,6 +18,7 @@ def punto_concentrico(coordenadas, k, iteraciones=100):
                 if distancia < distancia_minima:
                     distancia_minima = distancia
                     cluster_asignado = i
+            
             clusters[cluster_asignado].append(punto)
         
         # Actualización de los centroides
@@ -25,6 +26,7 @@ def punto_concentrico(coordenadas, k, iteraciones=100):
         for cluster in clusters:
             sum_x = sum(p[0] for p in cluster)
             sum_y = sum(p[1] for p in cluster)
+
             nuevo_centroide = (sum_x / len(cluster), sum_y / len(cluster))
             nuevos_centroides.append(nuevo_centroide)
         
@@ -36,32 +38,17 @@ def punto_concentrico(coordenadas, k, iteraciones=100):
     
     return centroides
 
-# Ejemplo de uso
-coordenadas = [
-    (-12.00413192, -77.01160745),
-    (-12.00278866, -77.00680093),
-    (-11.9999342, -77.00491266),
-    (-12.0017812, -76.99924783),
-    (-11.99120273, -77.004741),
-    (-11.99472893, -77.01092081),
-    (-11.98599729, -77.01040582),
-    (-11.96534248, -76.99461297),
-    (-11.96248762, -76.98946313),
-    (-11.95039614, -76.97710351),
-    (-11.94972438, -76.98637323),
-    (-11.93477718, -76.97727518),
-    (-11.97273137, -77.00268106),
-    (-11.96937281, -76.97281198),
-]
 
+def generar_url_google_maps(coordenadas):
+    clusters = punto_concentrico(coordenadas, 4)
+    clusters = [(-12.048395600763323, -77.1139782323095)] + clusters + [(-12.048395600763323, -77.1139782323095)]
+    ruta_optimizada = list(range(1, len(clusters)))
 
-
-def generar_url_google_maps(coordenadas, ruta_optimizada):
     # Construir la URL de Google Maps con la ruta optimizada
     base_url = "https://www.google.com/maps/dir/"
     for indice in ruta_optimizada:
-        base_url += f"{coordenadas[indice][0]},{coordenadas[indice][1]}/"
-    base_url += f"{coordenadas[ruta_optimizada[0]][0]},{coordenadas[ruta_optimizada[0]][1]}/"
+        base_url += f"{clusters[indice][0]},{clusters[indice][1]}/"
+    base_url += f"{clusters[ruta_optimizada[0]][0]},{clusters[ruta_optimizada[0]][1]}/"
 
     return base_url
 

@@ -201,6 +201,8 @@ function FormScreen({ product }) {
                         <Row>
                               <Col className='mb-32'>
                                           <a href={product?.url?.URL} target="_blank">RUTA OPTIMA</a>
+                                          <h5>N pedidos: {product?.url?.N_PEDIDOS}</h5>
+                                          <h5>N clusters: {product?.url?.N_CLUSTERS}</h5>
                               </Col>
                         </Row>
                   </Container>
