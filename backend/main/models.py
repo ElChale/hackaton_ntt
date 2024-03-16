@@ -3,6 +3,11 @@ from django.db import models
 # Create your models here.
 
 
+HORARIOS = (
+      (1, 'manana'),
+      (2, 'tarde'),
+      (3, 'noche')
+)
 
 class Pedido(models.Model):
       """
@@ -10,6 +15,8 @@ class Pedido(models.Model):
       """
       latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
       longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
+
+      disponible = models.SmallIntegerField(choices=HORARIOS, null=True, blank=True)
 
       alimentos = models.JSONField(default=list, blank=True)
 
