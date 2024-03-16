@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
+
 import reactLogo from './assets/react.svg'
 import { BrowserRouter, Routes,  Route } from 'react-router-dom'
 import Header from './components/Header'
@@ -10,13 +12,19 @@ import viteLogo from '/vite.svg'
 
 function App() {
 
+      const productFromRedux = useSelector((state) => state.product)
+      const [product, setProduct] = useState(productFromRedux)
+
+      useEffect(() => {
+            setProduct(productFromRedux)
+      }, [productFromRedux])
 
       return (
-            <div>
+            <div className='min-h-screen font-personalized'>
                   <BrowserRouter>
                         <Header/>
                         <Routes >
-                              <Route path="/" element={<FormScreen/>} />
+                              <Route path="/" element={<FormScreen product={product}/>} />
                               <Route path="/admin" element={<AdminScreen/>} /> 
                         </Routes>
                   </BrowserRouter>

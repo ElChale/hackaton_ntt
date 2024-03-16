@@ -12,7 +12,7 @@ function Header() {
                   <Container>
                         <Row>
                               <Col>
-                                    <h5>Cheap Quality Food App </h5>
+                                    <h5 className='font-bold'>Good Food App</h5>
                               </Col>
                         </Row>
                   </Container>
