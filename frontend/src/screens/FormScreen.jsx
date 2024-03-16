@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TileLayer, useMap, MapContainer, Popup, Marker } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 
-import { crearPedido } from '../reducers/productReducers'
+import { crearPedido, getRuta } from '../reducers/productReducers'
 
 //import { MapContainer } from 'react-leaflet/MapContainer'
 //import { Popup } from 'react-leaflet/Popup'
@@ -75,13 +75,14 @@ function FormScreen({ product }) {
             e.preventDefault();
             const form_data = new FormData(e.target)
             let alimentos = form_data.getAll('alimentos').map((str) => parseInt(str,10))
-            dispatch(crearPedido({latitude:position.lat, longitude:position.lng, disponible:horario, alimentos:alimentos}))
+            dispatch(crearPedido({latitude:position.lat, longitude:position.lng, disponible:Object.keys(HORARIOS).find(key => HORARIOS[key] === horario), alimentos:alimentos}))
             .then((result) => {
                   if (result.payload) {
                         if (result.payload.error) {
                               setError(result.payload.error)
                         } else {
-                              
+                              console.log('pedido creado')
+                              dispatch(getRuta())
                               setError('')
                         }
                     
@@ -114,11 +115,14 @@ function FormScreen({ product }) {
             });
       }, [position])
       
+      useEffect(() => {
+            dispatch(getRuta())
+      }, [])
 
       return (
             <div className='bg-gray-800 min-h-screen text-white'>
                   <Container className='py-5'>
-                        <Form onSubmit={(e) => handleSubmit(e)}>
+                        <Form onSubmit={(e) => {handleSubmit(e)}}>
                         <Row>
                               <Col>
                                     <h3>Hacer pedido</h3>
@@ -193,6 +197,14 @@ function FormScreen({ product }) {
                         </Row>
                         </Form>
                   </Container>
+                  <Container>
+                        <Row>
+                              <Col className='mb-32'>
+                                          <a href={product?.url?.URL} target="_blank">RUTA OPTIMA</a>
+                              </Col>
+                        </Row>
+                  </Container>
+      
             </div>
       )
 }
